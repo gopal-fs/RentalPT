@@ -1,10 +1,26 @@
 import RegisterModel from "../models/RegisterSchema.js"
 import {v4 as uuid} from 'uuid'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 
 
 export const Login=async(req,res)=>{
-    res.status(200).send('Login Succesfull')
+    try{
+        const {user_email,user_password}=req.body
+        const findUser=await RegisterModel.findOne({user_email})
+        if(!findUser) return res.status(500).send('User Does Not Exist!')
+        const payload={user_id:findUser.user_id,user_email}
+        const checkPassword=await bcrypt.compare(user_password,findUser.user_password)
+        if(checkPassword){
+            const token= jwt.sign(payload,process.env.SECRECT_KEY)
+            return res.status(200).send({message:'Login Succesfull',token})
+        }
+        return res.status(400).send('Password Incorrect')
+    }
+    catch(err){
+        console.log(`Error:${err.message}`)
+        return res.status(400).send('Unable to Login')
+    }
 
 }
 

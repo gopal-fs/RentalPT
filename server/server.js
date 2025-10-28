@@ -4,6 +4,7 @@ import authRouter from './routes/authRouter.js'
 import cors from 'cors'
 import connectMongoDB from './configs/db.js'
 import dotenv from 'dotenv'
+import userRouter from './routes/userRouter.js'
 
 dotenv.config()
 
@@ -13,9 +14,10 @@ app.use(express.json())
 app.use(cors())
 
 
-connectMongoDB()
+await connectMongoDB()
 
 app.use('/api',authRouter)
+app.use('/api',userRouter)
 
 app.listen(3000,()=>{
     console.log(`Server Running on Port 3000`)
