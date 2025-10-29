@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import axios from 'axios'
 
@@ -155,9 +155,12 @@ const mockProperties: Property[] = [
   },
 ];
 
+
+
 export default function Dashboard() {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate=useNavigate()
 
   useEffect(() => {
     setTimeout(() => {
@@ -166,6 +169,10 @@ export default function Dashboard() {
     }, 500);
   }, []);
 
+  const Post=async()=>{
+    navigate('/post-data')
+    
+  }
   const handleSaveProperty = (propertyId: string) => {
     console.log('Save property:', propertyId);
   };
@@ -290,7 +297,7 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-gray-800">Recent Listings</h1>
             <p className="text-gray-600 mt-1">Discover your perfect home</p>
           </div>
-          <Link to="/post-property">
+          <button onClick={Post}>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -299,7 +306,7 @@ export default function Dashboard() {
               <Plus className="w-5 h-5" />
               <span>Post Property</span>
             </motion.button>
-          </Link>
+          </button>
         </div>
 
         {loading ? (
