@@ -177,43 +177,43 @@ export default function Dashboard() {
     console.log('Save property:', propertyId);
   };
 
-  const call = async () => {
-    const formData = new FormData();
+  // const call = async () => {
+  //   const formData = new FormData();
   
-    // ✅ append all text fields
-    formData.append("user_id", "d3a48d17-03d5-4d89-9e3d-6ba31586c652");
-    formData.append("title", "Modern 2BHK Apartment in Mumbai");
-    formData.append("description", "Beautiful apartment with modern amenities");
-    formData.append("price", 25000);
-    formData.append("listing_type", "rent");
-    formData.append("property_type", "apartment");
-    formData.append("bedrooms", 2);
-    formData.append("bathrooms", 2);
-    formData.append("area_sqft", 1200);
-    formData.append("location_address", "123 Main St");
-    formData.append("location_city", "Mumbai");
-    formData.append("location_state", "Maharashtra");
-    formData.append("contact_name", "John Doe");
-    formData.append("contact_phone", 9876543210);
-    formData.append("contact_email", "john@example.com");
-    formData.append("status", "active");
+  //   // ✅ append all text fields
+  //   formData.append("user_id", "d3a48d17-03d5-4d89-9e3d-6ba31586c652");
+  //   formData.append("title", "Modern 2BHK Apartment in Mumbai");
+  //   formData.append("description", "Beautiful apartment with modern amenities");
+  //   formData.append("price", 25000);
+  //   formData.append("listing_type", "rent");
+  //   formData.append("property_type", "apartment");
+  //   formData.append("bedrooms", 2);
+  //   formData.append("bathrooms", 2);
+  //   formData.append("area_sqft", 1200);
+  //   formData.append("location_address", "123 Main St");
+  //   formData.append("location_city", "Mumbai");
+  //   formData.append("location_state", "Maharashtra");
+  //   formData.append("contact_name", "John Doe");
+  //   formData.append("contact_phone", 9876543210);
+  //   formData.append("contact_email", "john@example.com");
+  //   formData.append("status", "active");
   
-    // ✅ File from input
-    const fileInput = document.getElementById("file");
-    formData.append("image", fileInput.files[0]);  // ← key name must match multer
+  //   // ✅ File from input
+  //   const fileInput = document.getElementById("file");
+  //   formData.append("image", fileInput.files[0]);  // ← key name must match multer
   
-    const result = await axios.post(
-      "http://localhost:3000/api/post-property",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      }
-    );
+  //   const result = await axios.post(
+  //     "http://localhost:3000/api/post-property",
+  //     formData,
+  //     {
+  //       headers: {
+  //         "Content-Type": "multipart/form-data"
+  //       }
+  //     }
+  //   );
   
-    console.log(result.data);
-  };
+  //   console.log(result.data);
+  // };
   
 
   const [showFilters,setShowFilters]=useState(false)
@@ -222,8 +222,8 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-50">
       <Navbar onFilterClick={() => setShowFilters(!showFilters)} />
 
-      <input type='file' id='file' />
-      <button onClick={call}>send</button>
+      {/* <input type='file' id='file' />
+      <button onClick={call}>send</button> */}
       {showFilters && (
             <div className="max-w-7xl mx-auto mt-4 p-4 bg-slate-50 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
