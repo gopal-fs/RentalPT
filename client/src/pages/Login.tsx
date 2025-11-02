@@ -1,39 +1,59 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { KeyRound, Lock, Mail, Home } from 'lucide-react';
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [Loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showFailure, setShowFailure] = useState(false);
-  const { signIn } = useAuth();
+  const {user,loading}=useAuth()
+
+  useEffect(()=>{
+   
+    if(!loading && user){
+      navigate('/dashboard')
+    }
+    
+
+  },[user,loading])
+
+
+  console.log(user)
   const navigate = useNavigate();
+  const url=import.meta.env.VITE_BACKEND_URL
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    const { error } = await signIn(email, password);
-
-    if (error) {
+    try{
+      const sendData= await axios.post(`${url}/login`,{user_email:email,user_password:password})
+      Cookies.set('token', sendData.data.token, { expires: 4 });
+      setShowSuccess(true);
+       setTimeout(() => {
+        navigate('/dashboard');
+      }, 2500);
+      
+    }
+    catch(err:any){
       setShowFailure(true);
       setTimeout(() => {
         setShowFailure(false);
-        setError(error.message);
+        setError(err.message);
         setLoading(false);
       }, 2000);
-    } else {
-      setShowSuccess(true);
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 2500);
+
     }
+    
+    
   };
 
   return (
@@ -191,15 +211,7 @@ export default function Login() {
                 </div>
               </div>
 
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm"
-                >
-                  {error}
-                </motion.div>
-              )}
+              
 
               <div className="flex items-center justify-between text-sm">
                 <Link
@@ -212,10 +224,10 @@ export default function Login() {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={Loading}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Signing in...' : 'Sign In'}
+                {Loading ? 'Signing in...' : 'Sign In'}
               </button>
             </form>
 

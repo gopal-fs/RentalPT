@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { motion } from 'framer-motion';
 import { Plus } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import axios from 'axios'
 
 import PropertyCard from '../components/PropertyCard';
 import { Property } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 const mockProperties: Property[] = [
   {
@@ -159,8 +160,18 @@ const mockProperties: Property[] = [
 
 export default function Dashboard() {
   const [properties, setProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [Loading, setLoading] = useState(true);
   const navigate=useNavigate()
+  const {user,loading}=useAuth()
+
+useEffect(() => {
+  if (!loading && !user) {
+    navigate('/login');
+  }
+}, [loading, user, navigate]);
+
+if (loading) return <p>Loading...</p>; // or a spinner
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -218,12 +229,13 @@ export default function Dashboard() {
 
   const [showFilters,setShowFilters]=useState(false)
 
+ 
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar onFilterClick={() => setShowFilters(!showFilters)} />
 
-      {/* <input type='file' id='file' />
-      <button onClick={call}>send</button> */}
+      
       {showFilters && (
             <div className="max-w-7xl mx-auto mt-4 p-4 bg-slate-50 rounded-lg grid grid-cols-1 md:grid-cols-3 gap-8">
               <div>
@@ -297,8 +309,9 @@ export default function Dashboard() {
             <h1 className="text-3xl font-bold text-gray-800">Recent Listings</h1>
             <p className="text-gray-600 mt-1">Discover your perfect home</p>
           </div>
-          <button onClick={Post}>
+         
             <motion.button
+            onClick={Post}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center space-x-2 shadow-lg transition"
@@ -306,10 +319,10 @@ export default function Dashboard() {
               <Plus className="w-5 h-5" />
               <span>Post Property</span>
             </motion.button>
-          </button>
+        
         </div>
 
-        {loading ? (
+        {Loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(6)].map((_, i) => (
               <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">

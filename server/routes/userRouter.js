@@ -6,7 +6,7 @@ import { authenticateJWTToken } from '../middlewares/verifyToken.js'
 
 const userRouter=express.Router()
 
-userRouter.post('/post-property',authenticateJWTToken,upload.single("image"),postProperty)
+userRouter.post('/post-property',upload.single("image"),postProperty)
 userRouter.get('/get-property',getProperties)
 userRouter.post('/contact',contactUs)
 

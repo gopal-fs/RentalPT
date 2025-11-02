@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Home, Search, SlidersHorizontal, MessageCircle, User, LogOut, Bell } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
+
 type NavbarProps = {
   onFilterClick: () => void;
 };
@@ -12,8 +13,9 @@ export default function Navbar({ onFilterClick }: NavbarProps) {
   const [searchExpanded, setSearchExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const { profile, signOut } = useAuth();
+
   const navigate = useNavigate();
+  const {profile,logout}=useAuth()
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,8 +26,8 @@ export default function Navbar({ onFilterClick }: NavbarProps) {
   };
 
   const handleSignOut = async () => {
-    await signOut();
-    navigate('/login');
+    await logout();
+   
   };
 
   return (

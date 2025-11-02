@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Home, Mail, Lock, User } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import axios from 'axios';
 
 export default function Register() {
   const [fullName, setFullName] = useState('');
@@ -11,7 +12,8 @@ export default function Register() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signUp } = useAuth();
+  const url=import.meta.env.VITE_BACKEND_URL
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -30,13 +32,13 @@ export default function Register() {
 
     setLoading(true);
 
-    const { error } = await signUp(email, password, fullName);
-
-    if (error) {
-      setError(error.message);
-      setLoading(false);
-    } else {
-      navigate('/login', { state: { message: 'Account created successfully! Please sign in.' } });
+    try{
+      const sendData=await axios.post(`${url}/register`,{user_name:fullName,user_email:email,user_password:password})
+      navigate('/login')
+    }
+    catch(err:any){
+      setError(err.message)
+      setLoading(false)
     }
   };
 
