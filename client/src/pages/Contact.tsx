@@ -2,20 +2,32 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, MessageCircle, Send } from 'lucide-react';
 import Navbar from '../components/Navbar';
+import axios from 'axios';
 
 export default function Contact() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
+  const url=import.meta.env.VITE_BACKEND_URL
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSuccess(true);
-    setName('');
+   
+    
+    try{
+      const sendMail=await axios.post(`${url}/contact`,{name,email,message})
+      setSuccess(true)
+      setName('');
     setEmail('');
     setMessage('');
     setTimeout(() => setSuccess(false), 5000);
+
+
+    }
+    catch(err:any){
+      console.log(err.message)
+    }
   };
 
   return (
